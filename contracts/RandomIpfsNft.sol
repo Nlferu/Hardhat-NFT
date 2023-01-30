@@ -65,6 +65,22 @@ contract RandomIpfsNft is VRFConsumerBaseV2, ERC721URIStorage, Ownable {
         s_tokenCounter = 0;
     }
 
+    function _initializeContract(string[3] memory dogTokenUris) private {
+        if (s_initialized) {
+            revert RandomIpfsNft__AlreadyInitialized();
+        }
+        s_dogTokenUris = dogTokenUris;
+        s_initialized = true;
+    }
+
+    function withdraw() public onlyOwner {
+        uint256 amount = address(this).balance;
+        (bool success, ) = payable(msg.sender).call{value: amount}("");
+        if (!success) {
+            revert RandomIpfsNft__TransferFailed();
+        }
+    }
+
     function requestNft() public payable returns (uint256 requestId) {
         if (msg.value < i_mintFee) {
             revert RandomIpfsNft__NeedMoreETHSent();
@@ -90,22 +106,6 @@ contract RandomIpfsNft is VRFConsumerBaseV2, ERC721URIStorage, Ownable {
         // We use below because of additional customization, but it is not most gas efficient
         _setTokenURI(newTokenId, s_dogTokenUris[uint256(dogBreed)]);
         emit NftMinted(dogBreed, dogOwner);
-    }
-
-    function _initializeContract(string[3] memory dogTokenUris) private {
-        if (s_initialized) {
-            revert RandomIpfsNft__AlreadyInitialized();
-        }
-        s_dogTokenUris = dogTokenUris;
-        s_initialized = true;
-    }
-
-    function withdraw() public onlyOwner {
-        uint256 amount = address(this).balance;
-        (bool success, ) = payable(msg.sender).call{value: amount}("");
-        if (!success) {
-            revert RandomIpfsNft__TransferFailed();
-        }
     }
 
     // Below is used to get chances to getting each "DOG"
