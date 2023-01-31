@@ -11,15 +11,22 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     log("----------------------------------------------------")
     log(`Deploying RandomIpfsNft...`)
     log("Creating VRFV2 Subscription...")
-    vrfCoordinatorV2Mock = await ethers.getContract("VRFCoordinatorV2Mock")
-    vrfCoordinatorV2Address = vrfCoordinatorV2Mock.address
-    const transactionResponse = await vrfCoordinatorV2Mock.createSubscription()
-    const transactionReceipt = await transactionResponse.wait()
-    subscriptionId = transactionReceipt.events[0].args.subId
-    log(`Subscription Id: ${subscriptionId}`)
-    log(`Funding Subscription...`)
-    await vrfCoordinatorV2Mock.fundSubscription(subscriptionId, FUND_AMOUNT)
-    log(`Subscription Funded!`)
+    if (developmentChains.includes(network.name)) {
+        vrfCoordinatorV2Mock = await ethers.getContract("VRFCoordinatorV2Mock")
+        vrfCoordinatorV2Address = vrfCoordinatorV2Mock.address
+        const transactionResponse = await vrfCoordinatorV2Mock.createSubscription()
+        const transactionReceipt = await transactionResponse.wait()
+        subscriptionId = transactionReceipt.events[0].args.subId
+        const subscriptionOwner = transactionReceipt.events[0].args.owner
+        log(`Subscription Id: ${subscriptionId}`)
+        log(`Subscription Owner: ${subscriptionOwner}`)
+        log(`Funding Subscription...`)
+        await vrfCoordinatorV2Mock.fundSubscription(subscriptionId, FUND_AMOUNT)
+        log(`Subscription Funded!`)
+    } else {
+        vrfCoordinatorV2Address = networkConfig[chainId].vrfCoordinatorV2
+        subscriptionId = networkConfig[chainId].subscriptionId
+    }
 
     dogTokenUris = [
         "ipfs://QmaVkBn2tKmjbhphU7eyztbvSQU5EXDdqRyXZtRhSGgJGo",
@@ -28,7 +35,7 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     ]
 
     // Getting Details From `helper-hardhat-config.js`:
-    gasLane = networkConfig[chainId]["gasLane"]
+    gasLane = networkConfig[chainId].gasLane // or we can call it like in below examples:
     callbackGasLimit = networkConfig[chainId]["callbackGasLimit"]
     mintFee = networkConfig[chainId]["mintFee"]
 
@@ -42,14 +49,14 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     })
 
     // Ensure the RandomIpfsNft contract is a valid consumer of the VRFCoordinatorV2Mock contract.
-    //if (developmentChains.includes(network.name)) {
-    log(`Adding Consumer...`)
-    const addConsumerTx = await vrfCoordinatorV2Mock.addConsumer(subscriptionId, randomIpfsNft.address)
-    await addConsumerTx.wait(1)
-    const getConsumer = await vrfCoordinatorV2Mock.getSubscription(subscriptionId)
-    const { 0: balance, 1: reqCount, 2: owner, 3: consumer } = getConsumer
-    log(`Consumer Successfully Added! Consumers: ${consumer}`)
-    //}
+    if (developmentChains.includes(network.name)) {
+        log(`Adding Consumer...`)
+        const addConsumerTx = await vrfCoordinatorV2Mock.addConsumer(subscriptionId, randomIpfsNft.address)
+        await addConsumerTx.wait(1)
+        const getConsumer = await vrfCoordinatorV2Mock.getSubscription(subscriptionId)
+        const { 0: balance, 1: reqCount, 2: owner, 3: consumer } = getConsumer
+        log(`Consumer Successfully Added! Consumers: ${consumer}`)
+    }
 
     // Verify the deployment
     if (!developmentChains.includes(network.name) && process.env.ETHERSCAN_API_KEY) {
