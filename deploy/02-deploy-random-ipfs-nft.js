@@ -1,5 +1,7 @@
 const { network } = require("hardhat")
 const { verify } = require("../utils/verify")
+const { storeImages } = require("../utils/uploadToPinata")
+const { imagesLocation, handleTokenUris } = require("../scripts/handleTokenUris")
 const { developmentChains, networkConfig, FUND_AMOUNT } = require("../helper-hardhat-config")
 
 module.exports = async ({ getNamedAccounts, deployments }) => {
@@ -27,6 +29,19 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
         vrfCoordinatorV2Address = networkConfig[chainId].vrfCoordinatorV2
         subscriptionId = networkConfig[chainId].subscriptionId
     }
+
+    // Getting the IPFS hashes of our images
+
+    // 1. With our own IPFS node: https://docs.ipfs.io/
+    // 2. Pinata: https://www.pinata.cloud/
+    // 3. NFT.Storage: https://nft.storage/
+
+    if (process.env.UPLOAD_TO_PINATA === "true") {
+        dogTokenUris = await handleTokenUris()
+    }
+
+    await handleTokenUris()
+    await storeImages(imagesLocation)
 
     dogTokenUris = [
         "ipfs://QmaVkBn2tKmjbhphU7eyztbvSQU5EXDdqRyXZtRhSGgJGo",
@@ -65,4 +80,4 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     }
 }
 
-module.exports.tags = ["all", "randomnft"]
+module.exports.tags = ["all", "randomnft", "main"]
