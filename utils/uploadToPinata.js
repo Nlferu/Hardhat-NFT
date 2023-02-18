@@ -23,7 +23,7 @@ async function storeImages(imagesFilePath) {
     for (fileIndex in files) {
         const readableStreamForFile = fs.createReadStream(`${fullImagesPath}/${files[fileIndex]}`)
         try {
-            console.log(`Uploading ${fileIndex} File...`)
+            console.log(`Uploading File ${fileIndex}...`)
             const response = await pinata.pinFileToIPFS(readableStreamForFile)
             responses.push(response)
             console.log(`File ${fileIndex} Uploaded Successfully!`)
@@ -32,6 +32,16 @@ async function storeImages(imagesFilePath) {
         }
     }
     return { responses, files }
+}
+
+async function storeTokenUriMetadata(metadata) {
+    try {
+        const response = await pinata.pinJSONToIPFS(metadata)
+        return response
+    } catch (err) {
+        console.log(err)
+    }
+    return null
 }
 
 // We have to downgrade "@pinata/sdk": "^2.1.0" into "@pinata/sdk@^1.1.23" otherwise code won't work!
@@ -78,4 +88,4 @@ async function storeImages(imagesFilePath) {
 //     return { responses, files }
 // }
 
-module.exports = { storeImages }
+module.exports = { storeImages, storeTokenUriMetadata }

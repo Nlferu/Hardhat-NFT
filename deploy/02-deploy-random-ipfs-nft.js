@@ -36,12 +36,10 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     // 2. Pinata: https://www.pinata.cloud/
     // 3. NFT.Storage: https://nft.storage/
 
+    console.log(`Upload To Pinata: ${process.env.UPLOAD_TO_PINATA}`)
     if (process.env.UPLOAD_TO_PINATA === "true") {
         dogTokenUris = await handleTokenUris()
     }
-
-    await handleTokenUris()
-    await storeImages(imagesLocation)
 
     dogTokenUris = [
         "ipfs://QmaVkBn2tKmjbhphU7eyztbvSQU5EXDdqRyXZtRhSGgJGo",
