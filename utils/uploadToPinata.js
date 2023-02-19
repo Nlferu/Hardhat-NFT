@@ -35,16 +35,21 @@ async function storeImages(imagesFilePath) {
 }
 
 async function storeTokenUriMetadata(metadata) {
+    const options = {
+        pinataMetadata: {
+            name: metadata.name,
+        },
+    }
     try {
-        const response = await pinata.pinJSONToIPFS(metadata)
+        const response = await pinata.pinJSONToIPFS(metadata, options)
         return response
-    } catch (err) {
-        console.log(err)
+    } catch (error) {
+        console.log(error)
     }
     return null
 }
 
-// We have to downgrade "@pinata/sdk": "^2.1.0" into "@pinata/sdk@^1.1.23" otherwise code won't work!
+//We have to downgrade "@pinata/sdk": "^2.1.0" into "@pinata/sdk@^1.1.23" otherwise code won't work!
 // async function storeImages(imagesFilePath) {
 //     const fullImagesPath = path.resolve(imagesFilePath)
 

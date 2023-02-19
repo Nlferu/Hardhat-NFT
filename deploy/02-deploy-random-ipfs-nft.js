@@ -41,11 +41,11 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
         dogTokenUris = await handleTokenUris()
     }
 
-    dogTokenUris = [
-        "ipfs://QmaVkBn2tKmjbhphU7eyztbvSQU5EXDdqRyXZtRhSGgJGo",
-        "ipfs://QmYQC5aGZu2PTH8XzbJrbDnvhj3gVs7ya33H9mqUNvST3d",
-        "ipfs://QmZYmH5iDbD6v3U2ixoVAjioSzvWJszDzYdbeCLquGSpVm",
-    ]
+    // dogTokenUris = [
+    //     "ipfs://QmaVkBn2tKmjbhphU7eyztbvSQU5EXDdqRyXZtRhSGgJGo",
+    //     "ipfs://QmYQC5aGZu2PTH8XzbJrbDnvhj3gVs7ya33H9mqUNvST3d",
+    //     "ipfs://QmZYmH5iDbD6v3U2ixoVAjioSzvWJszDzYdbeCLquGSpVm",
+    // ]
 
     // Getting Details From `helper-hardhat-config.js`:
     gasLane = networkConfig[chainId].gasLane // or we can call it like in below examples:

@@ -3,7 +3,7 @@ const metadataTemplate = {
     name: "",
     description: "",
     image: "",
-    hauka: "miau",
+    hauka: "",
     attributes: [
         {
             trait_type: "Cutie",
