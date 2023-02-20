@@ -34,27 +34,28 @@ async function storeImages(imagesFilePath) {
         }
         try {
             console.log(`Uploading File ${fileIndex}...`)
-            const response = await pinata.pinFileToIPFS(readableStreamForFile, options)
-            responses.push(response)
-            console.log(`File ${fileIndex} Uploaded Successfully!`)
-            /* Another way to do above:
-                try {
-                    console.log(`Uploading File ${fileIndex}...`)
-                    await pinata
-                        .pinFileToIPFS(readableStreamForFile, options)
-                        .then((result) => {
-                            responses.push(result)
-                        })
-                        .catch((err) => {
-                            console.log(err)
-                        })
-                } catch (error) {
-                    console.log(error)
-                }
-            */
+            await pinata
+                .pinFileToIPFS(readableStreamForFile, options)
+                .then((result) => {
+                    responses.push(result)
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
         } catch (error) {
             console.log(error)
         }
+        /* Another way to do above:
+            try {
+                console.log(`Uploading File ${fileIndex}...`)
+                const response = await pinata.pinFileToIPFS(readableStreamForFile, options)
+                responses.push(response)
+                console.log(`File ${fileIndex} Uploaded Successfully!`)
+
+            } catch (error) {
+                console.log(error)
+            }
+        */
     }
     return { responses, files }
 }
