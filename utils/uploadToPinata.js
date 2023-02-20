@@ -15,9 +15,11 @@ async function storeImages(imagesFilePath) {
     const fullImagesPath = path.resolve(imagesFilePath)
     const files = fs.readdirSync(fullImagesPath).filter((file) => file.includes(".png"))
     /* Same Function without "=>"
-        const files = fs.readdirSync(fullImagesPath).filter(function (file) {
+        
+    const files = fs.readdirSync(fullImagesPath).filter(function (file) {
             return file.includes(".png")
         })
+
     */
     console.log(`Our Images:`)
     console.log(files)
@@ -46,15 +48,17 @@ async function storeImages(imagesFilePath) {
             console.log(error)
         }
         /* Another way to do above:
-            try {
-                console.log(`Uploading File ${fileIndex}...`)
-                const response = await pinata.pinFileToIPFS(readableStreamForFile, options)
-                responses.push(response)
-                console.log(`File ${fileIndex} Uploaded Successfully!`)
 
-            } catch (error) {
-                console.log(error)
-            }
+        try {
+            console.log(`Uploading File ${fileIndex}...`)
+            const response = await pinata.pinFileToIPFS(readableStreamForFile, options)
+            responses.push(response)
+            console.log(`File ${fileIndex} Uploaded Successfully!`)
+
+        } catch (error) {
+            console.log(error)
+        }
+
         */
     }
     return { responses, files }
