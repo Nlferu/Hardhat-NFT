@@ -21,9 +21,6 @@ async function handleTokenUris() {
         tokenUriMetadata.name = files[imageUploadResponseIndex].replace(".png", "")
         tokenUriMetadata.description = `An adorable ${tokenUriMetadata.name} pup`
         tokenUriMetadata.image = `ipfs://${imageUploadResponses[imageUploadResponseIndex].IpfsHash}`
-        tokenUriMetadata.hauka
-        tokenUriMetadata.attributes
-        tokenUriMetadata.date
         console.log(`Uploading ${tokenUriMetadata.name} metadata...`)
         // Store the JSON to pinata/IPFS
         const metadataUploadResponse = await storeTokenUriMetadata(tokenUriMetadata)

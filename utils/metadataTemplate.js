@@ -6,7 +6,7 @@ const metadataTemplate = {
     hauka: "",
     attributes: [
         {
-            trait_type: "Cutie",
+            trait_type: "Devilness",
             value: 666,
         },
         {
@@ -16,3 +16,5 @@ const metadataTemplate = {
     ],
     date: new Date(),
 }
+
+module.exports = { metadataTemplate }

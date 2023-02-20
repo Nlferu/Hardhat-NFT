@@ -1,7 +1,6 @@
 const { network } = require("hardhat")
 const { verify } = require("../utils/verify")
-const { storeImages } = require("../utils/uploadToPinata")
-const { imagesLocation, handleTokenUris } = require("../scripts/handleTokenUris")
+const { handleTokenUris } = require("../scripts/handleTokenUris")
 const { developmentChains, networkConfig, FUND_AMOUNT } = require("../helper-hardhat-config")
 
 module.exports = async ({ getNamedAccounts, deployments }) => {
