@@ -22,7 +22,7 @@ const BASE_FEE = ethers.utils.parseEther("0.25") // 0.25 is PREMIUM. It costs 0.
 const GAS_PRICE_LINK = 1e9 // 0.000000001 LINK per gas
 const DECIMALS = "18"
 const INITIAL_PRICE = "200000000000000000000"
-const FUND_AMOUNT = "1000000000000000000000"
+const FUND_AMOUNT = "1000000000000000000000" // 10 LINK's
 const developmentChains = ["hardhat", "localhost"]
 
 module.exports = {

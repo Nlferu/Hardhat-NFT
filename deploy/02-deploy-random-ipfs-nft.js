@@ -40,11 +40,11 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
         dogTokenUris = await handleTokenUris()
     }
 
-    // dogTokenUris = [
-    //     "ipfs://QmaVkBn2tKmjbhphU7eyztbvSQU5EXDdqRyXZtRhSGgJGo",
-    //     "ipfs://QmYQC5aGZu2PTH8XzbJrbDnvhj3gVs7ya33H9mqUNvST3d",
-    //     "ipfs://QmZYmH5iDbD6v3U2ixoVAjioSzvWJszDzYdbeCLquGSpVm",
-    // ]
+    dogTokenUris = [
+        "ipfs://Qme8VMEqiTdumEnACuSYZpFRVH32oJCuWQAL1gwFGjkiGW",
+        "ipfs://QmZkMhKfvsdho9XCiwMaHnjMnJdj2w9bhy8eVhXbyrJ4Es",
+        "ipfs://QmdrGpeDu9CaBoAtWaDxRzj7aFmJRyX9fTHCRv6ot4qtad",
+    ]
 
     // Getting Details From `helper-hardhat-config.js`:
     gasLane = networkConfig[chainId].gasLane // or we can call it like in below examples:
@@ -53,6 +53,7 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
 
     arguments = [vrfCoordinatorV2Address, subscriptionId, gasLane, callbackGasLimit, dogTokenUris, mintFee]
 
+    log("----------------------------------------------------")
     const randomIpfsNft = await deploy("RandomIpfsNft", {
         from: deployer,
         args: arguments,
@@ -60,6 +61,7 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
         waitConfirmations: network.config.blockConfirmations || 1,
     })
 
+    log("----------------------------------------------------")
     // Ensure the RandomIpfsNft contract is a valid consumer of the VRFCoordinatorV2Mock contract.
     if (developmentChains.includes(network.name)) {
         log(`Adding Consumer...`)
@@ -70,10 +72,11 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
         log(`Consumer Successfully Added! Consumers: ${consumer}`)
     }
 
+    log("----------------------------------------------------")
     // Verify the deployment
     if (!developmentChains.includes(network.name) && process.env.ETHERSCAN_API_KEY) {
         log("Verifying...")
-        await verify(basicNft.address, arguments)
+        await verify(randomIpfsNft.address, arguments)
     }
 }
 
