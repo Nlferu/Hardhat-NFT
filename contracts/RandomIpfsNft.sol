@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.8;
 
-// Users will have to pay to mint NFT, and we as owners can withdraw balance
+// Users will have to pay to mint NFT, and we as owners we can withdraw balance
 // ChainLink VRF will pick random dog:
 // Pug -> epic
 // Shiba -> rare
@@ -102,7 +102,7 @@ contract RandomIpfsNft is VRFConsumerBaseV2, ERC721URIStorage, Ownable {
         uint256 moddedRng = randomWords[0] % MAX_CHANCE_VALUE;
 
         Breed dogBreed = getBreedFromModdedRng(moddedRng);
-        s_tokenCounter += s_tokenCounter;
+        s_tokenCounter += 1;
         _safeMint(dogOwner, newTokenId);
         // We use below because of additional customization, but it is not most gas efficient
         _setTokenURI(newTokenId, s_dogTokenUris[uint256(dogBreed)]);
