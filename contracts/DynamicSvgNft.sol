@@ -69,12 +69,14 @@ contract DynamicSvgNft is ERC721, Ownable {
     }
 
     function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
-        if (!_exists(tokenId)) revert ERC721Metadata__URI_QueryFor_NonExistentToken();
-
+        if (!_exists(tokenId)) {
+            revert ERC721Metadata__URI_QueryFor_NonExistentToken();
+        }
         (, int256 price, , , ) = i_priceFeed.latestRoundData();
         string memory imageURI = s_lowImageURI;
-        if (price >= s_tokenIdToHighValues[tokenId]) imageURI = s_highImageURI;
-
+        if (price >= s_tokenIdToHighValues[tokenId]) {
+            imageURI = s_highImageURI;
+        }
         return
             string(
                 abi.encodePacked(
@@ -83,9 +85,9 @@ contract DynamicSvgNft is ERC721, Ownable {
                         bytes(
                             abi.encodePacked(
                                 '{"name":"',
-                                name(), // You can add whatever name here
+                                name(),
                                 '", "description":"An NFT that changes based on the Chainlink Feed", ',
-                                '"attributes": [{"trait_type": "devilness", "value": 100}], "image":"',
+                                '"attributes": [{"trait_type": "coolness", "value": 100}], "image":"',
                                 imageURI,
                                 '"}'
                             )
